@@ -82,4 +82,4 @@ def upload():
     return redirect(url_for('home', right_abi_risk=right_abi_risk, right_abi=right_abi,left_abi_risk=left_abi_risk,left_abi=left_abi))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5500)
+    app.run(debug=True)
