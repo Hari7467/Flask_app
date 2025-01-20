@@ -1,1 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>Healthcare User Dashboard</h1>
+    </div>
+
+    <div class="container"> 
+        <h1>Welcome, Patient</h1>
+        <p>Please upload your medical reports or images for analysis.</p>
+
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <!-- Option 1 -->
+            <div>
+                <label for="option1-num-radio">Option 1 - Numeric Input:</label>
+                <input type="radio" id="option1-num-radio" name="option1" value="numeric" onclick="toggleInput('option1')" checked>
+                <label for="option1-image-radio">Option 1 - Image Upload:</label>
+                <input type="radio" id="option1-image-radio" name="option1" value="image" onclick="toggleInput('option1')">
+            </div>
+            <div id="option1-num" style="display: block;">
+                <label for="option1-num-input">Enter Number:</label>
+                <input type="number" id="option1-num-input" name="option1-num">
+            </div>
+            <div id="option1-image" style="display: none;">
+                <label for="option1-image-input">Upload Image:</label>
+                <input type="file" id="option1-image-input" name="option1-image" accept="image/*">
+            </div>
+            <hr>
+            <!-- Option 2 -->
+            <div>
+                <label for="option2-num-radio">Option 2 - Numeric Input:</label>
+                <input type="radio" id="option2-num-radio" name="option2" value="numeric" onclick="toggleInput('option2')" checked>
+                <label for="option2-image-radio">Option 2 - Image Upload:</label>
+                <input type="radio" id="option2-image-radio" name="option2" value="image" onclick="toggleInput('option2')">
+            </div>
+            <div id="option2-num" style="display: block;">
+                <label for="option2-num-input">Enter Number:</label>
+                <input type="number" id="option2-num-input" name="option2-num">
+            </div>
+            <div id="option2-image" style="display: none;">
+                <label for="option2-image-input">Upload Image:</label>
+                <input type="file" id="option2-image-input" name="option2-image" accept="image/*">
+            </div>
+            <hr>
+    
+            <!-- Option 3 -->
+            <div>
+                <label for="option3-num-radio">Option 3 - Numeric Input:</label>
+                <input type="radio" id="option3-num-radio" name="option3" value="numeric" onclick="toggleInput('option3')" checked>
+                <label for="option3-image-radio">Option 3 - Image Upload:</label>
+                <input type="radio" id="option3-image-radio" name="option3" value="image" onclick="toggleInput('option3')">
+            </div>
+            <div id="option3-num" style="display: block;">
+                <label for="option3-num-input">Enter Number:</label>
+                <input type="number" id="option3-num-input" name="option3-num">
+            </div>
+            <div id="option3-image" style="display: none;">
+                <label for="option3-image-input">Upload Image:</label>
+                <input type="file" id="option3-image-input" name="option3-image" accept="image/*">
+            </div>
+            <hr>
+
+            <!-- Option 4 -->
+            <div>
+                <label for="option4-num-radio">Option 4 - Numeric Input:</label>
+                <input type="radio" id="option4-num-radio" name="option4" value="numeric" onclick="toggleInput('option4')" checked>
+                <label for="option4-image-radio">Option 4 - Image Upload:</label>
+                <input type="radio" id="option4-image-radio" name="option4" value="image" onclick="toggleInput('option4')">
+            </div>
+            <div id="option4-num" style="display: block;">
+                <label for="option4-num-input">Enter Number:</label>
+                <input type="number" id="option4-num-input" name="option4-num">
+            </div>
+            <div id="option4-image" style="display: none;">
+                <label for="option4-image-input">Upload Image:</label>
+                <input type="file" id="option4-image-input" name="option4-image" accept="image/*">
+            </div>
+            <hr>
+    
+            <button type="submit" onclick="uploadImage()">Submit</button>
+        </form> 
+        <div id="output" style="margin-top: 20px;">     
+            
+
+            {% if right_abi %}
+            <h2>Right ABI:</h2>
+            <p>{{ right_abi }}</p>
+            <h2>Right ABI Risk</h2>
+            <p>{{ right_abi_risk }}</p>
+            {% endif %}
+
+            {% if left_abi %}
+            <h2>Left ABI:</h2>
+            <p>{{ left_abi }}</p>
+            <h2>Left ABI Risk</h2>
+            <p>{{ left_abi_risk }}</p>
+            {% endif %}
+            <button onclick="reload()">refresh</button>
+        </div>
+    </div>
+    
+    <div class="footer">
+        &copy; 2025 Healthcare Inc. All rights reserved.
+    </div>
+    <script src="{{ url_for('static', filename='js/home.js') }}"> </script>
+</body>
+</html>
 
