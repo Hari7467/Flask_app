@@ -1,98 +1,85 @@
-from PIL import Image
-import pytesseract
-import cv2 as cv
-import numpy as np
-import imutils
-from imutils import contours
+from flask import Flask, request, render_template, url_for, flash, redirect, session
+import os
+from digit import digit_extraction, calculation , risk_classification
 
-# Set the path for Tesseract
-pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files/Tesseract-OCR/tesseract.exe'
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Required for using session
 
-# Load the image in grayscale
-img = cv.imread('digital-38504_1280.png', 0)
+@app.route('/')
+def index():
+    return redirect(url_for('welcome'))
 
-# Check if the image is loaded successfully
-if img is None:
-    print("Error loading image.")
-    exit()
+# Routing to welcome page
+@app.route('/welcome')
+def welcome():
+    return render_template('welcome.html')
 
-# Create kernels for morphological operations
-rectKernel = cv.getStructuringElement(cv.MORPH_RECT, (10, 8))
-sqKernel = cv.getStructuringElement(cv.MORPH_RECT, (5, 5))
+# Routing to home page
+@app.route('/home')
+def home():
+    # Retrieve data from session
+    right_abi = request.args.get('right_abi', None)
+    left_abi = request.args.get('left_abi', None)
+    right_abi_risk = request.args.get('right_abi_risk', '')
+    left_abi_risk = request.args.get('left_abi_risk', '')
+    return render_template('home.html',right_abi_risk=right_abi_risk, right_abi=right_abi,left_abi_risk=left_abi_risk,left_abi=left_abi)
 
-# Perform morphological operations (TOPHAT)
-tophat = cv.morphologyEx(img, cv.MORPH_TOPHAT, rectKernel)
+@app.route('/upload', methods=['POST'])
+def upload():
+    
+    option1 = request.form.get('option1')
+    if option1 == 'numeric':
+        option1_value = request.form['option1-num']
+    elif option1 == 'image':
+        option1_image = request.files['option1-image']
+        image_path = os.path.join('uploads', option1_image.filename)
+        option1_image.save(image_path)
+        option1_value = digit_extraction(image_path)
 
-# Sobel gradient computation
-gradX = cv.Sobel(tophat, ddepth=cv.CV_32F, dx=1, dy=0, ksize=-1)
-gradX = np.absolute(gradX)
-(minVal, maxVal) = (np.min(gradX), np.max(gradX))
-gradX = (255 * ((gradX - minVal) / (maxVal - minVal)))
-gradX = gradX.astype("uint8")
+    # Handle Option 2
+    option2 = request.form.get('option2')
+    if option2 == 'numeric':
+        option2_value = request.form['option2-num']
+    elif option2 == 'image':
+        option2_image = request.files['option2-image']
+        image_path = os.path.join('uploads', option2_image.filename)
+        option2_image.save(image_path)
+        option2_value = digit_extraction(image_path)
 
-# Apply closing operation to fill gaps
-gradX = cv.morphologyEx(gradX, cv.MORPH_CLOSE, rectKernel)
+    # Handle Option 3
+    option3 = request.form.get('option3')
+    if option3 == 'numeric':
+        option3_value = request.form['option3-num']
+    elif option3 == 'image':
+        option3_image = request.files['option3-image']
+        image_path = os.path.join('uploads', option3_image.filename)
+        option3_image.save(image_path)
+        option3_value = digit_extraction(image_path)
 
-# Apply Otsu thresholding to binarize the image
-thresh = cv.threshold(gradX, 0, 255, cv.THRESH_BINARY | cv.THRESH_OTSU)[1]
+    # Handle Option 4
+    option4 = request.form.get('option4')
+    if option4 == 'numeric':
+        option4_value = request.form['option4-num']
+    elif option4 == 'image':
+        option4_image = request.files['option4-image']
+        image_path = os.path.join('uploads', option4_image.filename)
+        option4_image.save(image_path)
+        option4_value = digit_extraction(image_path)
+    # convert the string into float
+    try:
+        option1_value = float(option1_value)  # Convert to float
+        option2_value = float(option2_value)  # Convert to float
+        option3_value = float(option3_value)  # Convert to float
+        option4_value = float(option4_value)  # Convert to float
+    except ValueError:
+        # Handle the case where conversion fails (invalid input)
+        return "Error: Invalid input. Please enter numeric values."
+    # calculation
+    right_abi,left_abi = calculation(option1_value,option2_value,option3_value,option4_value)
+    # Risk classification
+    right_abi_risk,left_abi_risk = risk_classification(right_abi,left_abi)
+    # Print all collected values (for demonstration purposes)
+    return redirect(url_for('home', right_abi_risk=right_abi_risk, right_abi=right_abi,left_abi_risk=left_abi_risk,left_abi=left_abi))
 
-# Apply second closing operation
-thresh = cv.morphologyEx(thresh, cv.MORPH_CLOSE, sqKernel)
-
-# Find contours
-cnts, _ = cv.findContours(thresh.copy(), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-
-# Loop over the contours
-for (i, c) in enumerate(cnts):
-    # Compute the bounding box of the contour
-    (x, y, w, h) = cv.boundingRect(c)
-    ar = w / float(h)
-
-    # Filter contours based on aspect ratio
-    if 2.5 < ar < 4.0:
-        print(f"Contour {i}: (x={x}, y={y}, w={w}, h={h})")
-
-        # Crop the image around the bounding box
-        crop_img = img[y-5:y+h+5, x-5:x+w+5]
-
-        # Check if the cropped image is valid
-        if crop_img.size == 0:
-            print(f"Empty cropped image at contour {i}. Skipping...")
-            continue
-
-        # Visualize the cropped ROI to check if it's correct
-        cv.imshow(f'Cropped ROI {i}', crop_img)
-        cv.waitKey(0)  # Wait for a key press to proceed
-
-        # Apply Otsu's thresholding to crop image
-        th2 = cv.threshold(crop_img, 0, 255, cv.THRESH_BINARY | cv.THRESH_OTSU)[1]
-
-        # Find contours in the cropped image
-        digitCnts, _ = cv.findContours(th2.copy(), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-
-        # Sort the contours from left to right
-        digitCnts = contours.sort_contours(digitCnts, method="left-to-right")[0]
-
-        for d in digitCnts:
-            (x, y, w, h) = cv.boundingRect(d)
-            roi = crop_img[y-1:y+h+1, x-1:x+w+1]
-
-            # Check if ROI is non-empty before resizing
-            if roi.size == 0:
-                print(f"Empty ROI at digit contour {i}. Skipping...")
-                continue
-
-            # Resize and apply thresholding to the ROI
-            roi = cv.resize(roi, (200, 120))
-            th3 = cv.threshold(roi, 0, 255, cv.THRESH_BINARY | cv.THRESH_OTSU)[1]
-
-            # Use pytesseract to extract the digit from the image
-            digit_text = pytesseract.image_to_string(th3, config='outputbase digits')
-
-            # Remove any non-digit characters
-            digit_text = ''.join(filter(str.isdigit, digit_text))
-
-            if digit_text:
-                print(f"Extracted digit: {digit_text}")
-            else:
-                print("No digit detected.")
+if __name__ == '__main__':
+    app.run(debug=True, port=5500)
