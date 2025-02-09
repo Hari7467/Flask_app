@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC Healthcare - PAD Diagnosis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/welcome.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">ABC Healthcare</div>
+            <ul>
+                <li><a href="/" class="active">Welcome</a></li>
+                <li><a href="/home">ABI Calculator</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Welcome to ABC Healthcare</h1>
+            <h2>Advanced PAD Diagnosis Solutions</h2>
+            <p>Leading the way in Peripheral Arterial Disease diagnosis with cutting-edge ABI Index calculation</p>
+            <a href="/home" class="cta-button">Start Diagnosis</a>
+        </section>
+
+        <section class="features">
+            <h2>Why Choose ABC Healthcare?</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="icon">🏥</div>
+                    <h3>Accurate Diagnosis</h3>
+                    <p>State-of-the-art ABI calculation for precise PAD diagnosis</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📱</div>
+                    <h3>User-Friendly</h3>
+                    <p>Simple interface for both manual input and image processing</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">⚡</div>
+                    <h3>Fast Results</h3>
+                    <p>Instant ABI calculations and risk assessments</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📊</div>
+                    <h3>Detailed Analysis</h3>
+                    <p>Comprehensive PAD risk evaluation</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 ABC Healthcare. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/welcome.js') }}"></script>
+</body>
+</html>
