@@ -31,12 +31,7 @@ async function fetchData() {
     hideError();
     
     try {
-        const response = await fetch('/getdata', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        const response = await fetch('https://flask-app-pqxn.onrender.com/getdata', { method: 'GET' });
 
         const result = await response.json();
         if (result.error) {
