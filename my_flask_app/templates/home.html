@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABI Calculator - ABC Healthcare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">ABC Healthcare</div>
+            <ul>
+                <li><a href="/">Welcome</a></li>
+                <li><a href="/home" class="active">ABI Calculator</a></li>
+                <li><a href="/analysis" class="analysis">analysis</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="calculator-container">
+            <div class="calculator-header">
+                <h1>ABI Index Calculator</h1>
+                <p class="subtitle">Professional Peripheral Arterial Disease Diagnosis Tool</p>
+            </div>
+
+            <div class="input-mode-toggle">
+                <button class="toggle-btn active" data-mode="manual">
+                    <i class="fas fa-keyboard"></i> Manual Input
+                </button>
+                <button class="toggle-btn" data-mode="image">
+                    <i class="fas fa-camera"></i> Image Upload
+                </button>
+            </div>
+
+            <div id="manual-input" class="input-section active">
+                <form id="abi-form" class="measurement-form">
+                    <div class="measurements-grid">
+                        <div class="measurement-card">
+                            <div class="card-header">
+                                <i class="fas fa-heart"></i>
+                                <h3>Right Arm</h3>
+                            </div>
+                            <div class="input-group">
+                                <label for="right-arm">Systolic BP (mmHg)</label>
+                                <input type="number" id="right-arm" required min="0" max="300" placeholder="Enter value">
+                                <span class="unit">mmHg</span>
+                            </div>
+                        </div>
+
+                        <div class="measurement-card">
+                            <div class="card-header">
+                                <i class="fas fa-heart"></i>
+                                <h3>Left Arm</h3>
+                            </div>
+                            <div class="input-group">
+                                <label for="left-arm">Systolic BP (mmHg)</label>
+                                <input type="number" id="left-arm" required min="0" max="300" placeholder="Enter value">
+                                <span class="unit">mmHg</span>
+                            </div>
+                        </div>
+
+                        <div class="measurement-card">
+                            <div class="card-header">
+                                <i class="fas fa-heart"></i>
+                                <h3>Right Ankle</h3>
+                            </div>
+                            <div class="input-group">
+                                <label for="right-ankle">Systolic BP (mmHg)</label>
+                                <input type="number" id="right-ankle" required min="0" max="300" placeholder="Enter value">
+                                <span class="unit">mmHg</span>
+                            </div>
+                        </div>
+
+                        <div class="measurement-card">
+                            <div class="card-header">
+                                <i class="fas fa-heart"></i>
+                                <h3>Left Ankle</h3>
+                            </div>
+                            <div class="input-group">
+                                <label for="left-ankle">Systolic BP (mmHg)</label>
+                                <input type="number" id="left-ankle" required min="0" max="300" placeholder="Enter value">
+                                <span class="unit">mmHg</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="calculate-btn">
+                        <i class="fas fa-calculator"></i> Calculate ABI
+                    </button>
+                </form>
+            </div>
+
+            <div id="image-input" class="input-section">
+                <form id="image-form" class="measurement-form">
+                    <div class="measurements-grid">
+                        <div class="measurement-card">
+                            <div class="card-header">
+                                <i class="fas fa-camera"></i>
+                                <h3>Right Arm Image</h3>
+                            </div>
+                            <div class="drop-zone" data-input="right-arm-image">
+                                <div class="drop-zone-content">
+                                    <i class="fas fa-upload"></i>
+                                    <span class="drop-zone-prompt">Drop image here or click to upload</span>
+                                </div>
+                                <input type="file" name="right-arm-image" class="drop-zone-input" accept="image/*">
+                                <div class="preview-container"></div>
+                            </div>
+                        </div>
+
+                        <div class="measurement-card">
+                            <div class="card-header">
+                                <i class="fas fa-camera"></i>
+                                <h3>Left Arm Image</h3>
+                            </div>
+                            <div class="drop-zone" data-input="left-arm-image">
+                                <div class="drop-zone-content">
+                                    <i class="fas fa-upload"></i>
+                                    <span class="drop-zone-prompt">Drop image here or click to upload</span>
+                                </div>
+                                <input type="file" name="left-arm-image" class="drop-zone-input" accept="image/*">
+                                <div class="preview-container"></div>
+                            </div>
+                        </div>
+
+                        <div class="measurement-card">
+                            <div class="card-header">
+                                <i class="fas fa-camera"></i>
+                                <h3>Right Ankle Image</h3>
+                            </div>
+                            <div class="drop-zone" data-input="right-ankle-image">
+                                <div class="drop-zone-content">
+                                    <i class="fas fa-upload"></i>
+                                    <span class="drop-zone-prompt">Drop image here or click to upload</span>
+                                </div>
+                                <input type="file" name="right-ankle-image" class="drop-zone-input" accept="image/*">
+                                <div class="preview-container"></div>
+                            </div>
+                        </div>
+
+                        <div class="measurement-card">
+                            <div class="card-header">
+                                <i class="fas fa-camera"></i>
+                                <h3>Left Ankle Image</h3>
+                            </div>
+                            <div class="drop-zone" data-input="left-ankle-image">
+                                <div class="drop-zone-content">
+                                    <i class="fas fa-upload"></i>
+                                    <span class="drop-zone-prompt">Drop image here or click to upload</span>
+                                </div>
+                                <input type="file" name="left-ankle-image" class="drop-zone-input" accept="image/*">
+                                <div class="preview-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="calculate-btn">
+                        <i class="fas fa-calculator"></i> Process Images & Calculate
+                    </button>
+                </form>
+            </div>
+
+            <div id="results" class="results-section hidden">
+                <div class="results-header">
+                    <h2><i class="fas fa-chart-bar"></i> ABI Results</h2>
+                    <button class="print-btn" onclick="window.print()">
+                        <i class="fas fa-print"></i> Print Report
+                    </button>
+                </div>
+                
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-header">
+                            <i class="fas fa-heartbeat"></i>
+                            <h3>Right Leg ABI</h3>
+                        </div>
+                        <div class="abi-value" id="right-abi">-</div>
+                        <div class="risk-level" id="right-risk">-</div>
+                        <div class="result-details" id="right-details"></div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-header">
+                            <i class="fas fa-heartbeat"></i>
+                            <h3>Left Leg ABI</h3>
+                        </div>
+                        <div class="abi-value" id="left-abi">-</div>
+                        <div class="risk-level" id="left-risk">-</div>
+                        <div class="result-details" id="left-details"></div>
+                    </div>
+                </div>
+
+                <div class="interpretation">
+                    <div class="interpretation-header">
+                        <i class="fas fa-info-circle"></i>
+                        <h3>Clinical Interpretation Guide</h3>
+                    </div>
+                    <div class="interpretation-grid">
+                        <div class="interpretation-item normal">
+                            <span class="range">>1.3</span>
+                            <span class="description">Non-compressible arteries</span>
+                        </div>
+                        <div class="interpretation-item normal">
+                            <span class="range">0.9-1.3</span>
+                            <span class="description">Normal</span>
+                        </div>
+                        <div class="interpretation-item mild">
+                            <span class="range">0.7-0.89</span>
+                            <span class="description">Mild PAD</span>
+                        </div>
+                        <div class="interpretation-item moderate">
+                            <span class="range">0.4-0.69</span>
+                            <span class="description">Moderate PAD</span>
+                        </div>
+                        <div class="interpretation-item severe">
+                            <span class="range"><0.4</span>
+                            <span class="description">Severe PAD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 ABC Healthcare. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>
