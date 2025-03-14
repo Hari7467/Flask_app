@@ -9,8 +9,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 # MongoDB connection
-MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://harivijayan2004:97041208@cluster0.jpzey.mongodb.net/")
-client = MongoClient(MONGO_URI)
+client = MongoClient("mongodb+srv://harivijayan2004:97041208@cluster0.jpzey.mongodb.net/?retryWrites=true&w=majority&tls=true")
 db = client["bptracker"]
 collection = db["readings"]
 
