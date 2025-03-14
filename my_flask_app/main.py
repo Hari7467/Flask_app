@@ -27,44 +27,24 @@ def analysis():
 
 @app.route('/getdata', methods=['GET'])
 def getdata():
-    data = list(collection.find())
+    data = list(collection.find().limit(10))  # Fetch up to 10 records
 
     if not data:
         return jsonify({"error": "No data found"}), 404
 
-    # Convert ObjectId to string
-    for item in data:
-        item['_id'] = str(item['_id'])
+    # Format data for the frontend
+    extracted_data = [{
+        "Date": item["date"],
+        "Right ABI": item["abi_result"]["right_abi"],
+        "Left ABI": item["abi_result"]["left_abi"]
+    } for item in data]
 
-    extracted_data = []
-    for item in data:
-        extracted_data.append({
-            "Date": item["date"],
-            "Right Arm": item["right_arm"],
-            "Left Arm": item["left_arm"],
-            "Right Ankle": item["right_ankle"],
-            "Left Ankle": item["left_ankle"],
-            "Right ABI": item["abi_result"]["right_abi"],
-            "Left ABI": item["abi_result"]["left_abi"],
-            "Right Risk": item["abi_result"]["right_risk"],
-            "Left Risk": item["abi_result"]["left_risk"],
-            "Highest Brachial": item["abi_result"]["highest_brachial"]
-        })
-
-    # Convert filtered data to DataFrame
-    df = pd.DataFrame(extracted_data)
-    # Save DataFrame to Excel file
-    excel_file = 'results.xlsx'
-    df.to_excel(excel_file, index=False)
-
-    # Extract only 'date' and 'abi_result' columns
-    filtered_data = df[['Date', 'Right ABI', 'Left ABI']]
-    filter_file = 'filtered_result.xlsx'
-    filtered_data.to_excel(filter_file, index=False)
-    if filtered_data.empty:
+    if not extracted_data:
         return jsonify({'error': 'No filtered data available'}), 404
-    return jsonify(filtered_data.to_dict(orient='records'))
-    
+
+    # Send JSON response directly
+    return jsonify(extracted_data)
+
 
     
 @app.route('/calculate', methods=['POST'])
