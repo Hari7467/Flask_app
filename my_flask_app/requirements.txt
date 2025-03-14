@@ -5,3 +5,4 @@ flask
 opencv-python
 pymongo
 pandas
+flask_cors
