@@ -9,7 +9,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 # MongoDB connection
-client = MongoClient("mongodb+srv://harivijayan2004:97041208@cluster0.jpzey.mongodb.net/?retryWrites=true&w=majority&tls=true")
+client = MongoClient("mongodb+srv://harivijayan2004:97041208@cluster0.jpzey.mongodb.net/?retryWrites=true&w=majority&tls=true&tlsAllowInvalidCertificates=true")
+
 db = client["bptracker"]
 collection = db["readings"]
 
