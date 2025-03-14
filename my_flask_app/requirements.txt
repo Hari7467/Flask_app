@@ -4,3 +4,4 @@ gunicorn
 flask
 opencv-python
 pymongo
+pandas
