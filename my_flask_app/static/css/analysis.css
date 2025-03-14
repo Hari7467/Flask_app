@@ -1,0 +1,227 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    background-color: #f7f9fc;
+    color: #333;
+    line-height: 1.6;
+}
+
+.dashboard-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 24px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 16px;
+}
+
+.dashboard-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.control-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.control-select:hover {
+    border-color: #bbb;
+}
+
+.control-select:focus {
+    outline: none;
+    border-color: #0088FE;
+    box-shadow: 0 0 0 2px rgba(0, 136, 254, 0.2);
+}
+
+.chart-container {
+    background-color: #f7f9fc;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 24px;
+    height: 300px;
+    position: relative;
+}
+
+.loading-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(247, 249, 252, 0.7);
+    z-index: 10;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(0, 136, 254, 0.2);
+    border-left-color: #0088FE;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: #e74c3c;
+    font-weight: 500;
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(247, 249, 252, 0.7);
+    z-index: 10;
+}
+
+.results-container {
+    background-color: #f7f9fc;
+    border-radius: 6px;
+    padding: 16px;
+}
+
+.results-table-container {
+    overflow-x: auto;
+    margin-bottom: 16px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eaeaea;
+}
+
+th {
+    font-weight: 500;
+    color: #666;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tbody tr:hover {
+    background-color: #f5f8fa;
+}
+
+.positive-change {
+    color: #2ecc71;
+    font-weight: 500;
+}
+
+.negative-change {
+    color: #e74c3c;
+    font-weight: 500;
+}
+
+.na-change {
+    color: #95a5a6;
+}
+
+.summary-stats {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.stat-item {
+    flex: 1;
+    min-width: 150px;
+}
+
+.stat-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #7f8c8d;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .dashboard-controls {
+        margin-top: 16px;
+        flex-wrap: wrap;
+    }
+    
+    .control-select {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .summary-stats {
+        flex-direction: column;
+    }
+}
