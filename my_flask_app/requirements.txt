@@ -3,3 +3,4 @@ pytesseract
 gunicorn
 flask
 opencv-python
+pymongo
