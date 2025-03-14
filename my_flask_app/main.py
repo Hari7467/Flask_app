@@ -5,8 +5,9 @@ from calculation import calculate_abi
 from image_processing import extract_numbers_from_image
 import pandas as pd
 from datetime import date
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app)
 # MongoDB connection
 MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://harivijayan2004:97041208@cluster0.jpzey.mongodb.net/")
 client = MongoClient(MONGO_URI)
