@@ -28,7 +28,7 @@ def analysis():
 
 @app.route('/getdata', methods=['GET'])
 def getdata():
-    data = list(collection.find().limit(10))  # Fetch up to 10 records
+    data = list(collection.find())  
 
     if not data:
         return jsonify({"error": "No data found"}), 404
@@ -74,28 +74,39 @@ def calculate():
         return jsonify(result)
 
 
-@app.route('/process-image', methods=['POST'])
-def process_image():
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image uploaded'}), 400
+
+@app.route('/process-images', methods=['POST'])
+def process_images():
+    required_keys = ["right-arm-image", "left-arm-image", "right-ankle-image", "left-ankle-image"]
+    readings = []
     
-    image = request.files['image']
-    numbers = extract_numbers_from_image(image)
-    if numbers:
-        result = calculate_abi(*numbers)
+    for key in required_keys:
+        if key not in request.files:
+            return jsonify({'error': f'Missing image for {key}'}), 400
+        image = request.files[key]
+        numbers = extract_numbers_from_image(image)
+        print(numbers)
+        if numbers is None:  # Debugging step
+            return jsonify({'error': f'Failed to extract numbers from {key}. Ensure the image is clear and readable.'}), 400
+        readings.append(numbers)
+        
+    if len(readings) == 4:
+        result = calculate_abi(*readings)
 
         # Save extracted values and result to MongoDB
         entry = {
-            "right_arm": numbers[0],
-            "left_arm": numbers[1],
-            "right_ankle": numbers[2],
-            "left_ankle": numbers[3],
+            "date": date.today().strftime("%Y-%m-%d"),
+            "right_arm": readings[0],
+            "left_arm": readings[1],
+            "right_ankle": readings[2],
+            "left_ankle": readings[3],
             "abi_result": result
         }
         collection.insert_one(entry)
 
         return jsonify(result)
-    return jsonify({'error': 'Could not extract numbers from image'}), 400
+    else:
+         return jsonify({"error": f"Expected 4 valid readings, but got {len(readings)}. Ensure all images are clear and readable."})
 
 if __name__ == '__main__':
     app.run(debug=True)
