@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
             right_ankle: document.getElementById('right-ankle').value,
             left_ankle: document.getElementById('left-ankle').value
         };
-
+        // Show loading animation
+        document.getElementById('loading-indicator').style.display = 'flex';
         try {
            const response = await fetch('https://flask-app-pqxn.onrender.com/calculate', {
     method: 'POST',
@@ -51,8 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
     body: JSON.stringify(formData)
 });
 
-
             const result = await response.json();
+             // Hide loading animation
+            document.getElementById('loading-indicator').style.display = 'none';
             if (result.error) {
                 showError(result.error);
                 return;
@@ -82,7 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
             showError('Please upload at least one image.');
             return;
         }
-
+        // Show loading animation
+        document.getElementById('loading-indicator').style.display = 'flex';
         try {
             const response = await fetch('/process-images', {
                 method: 'POST',
@@ -90,6 +93,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             const result = await response.json();
+            // Hide loading animation
+            document.getElementById('loading-indicator').style.display = 'none';
             if (result.error) {
                 showError(result.error);
                 return;
