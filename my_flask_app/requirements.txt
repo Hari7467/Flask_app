@@ -1,8 +1,7 @@
 pillow
-pytesseract
+requests
 gunicorn
 flask
-opencv-python
 pymongo
 pandas
 flask_cors
